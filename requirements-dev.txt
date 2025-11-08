@@ -1,0 +1,31 @@
+# --- Core testing and coverage ---
+pytest==8.3.2
+pytest-cov==5.1.0
+coverage==7.6.0
+
+# --- Linting & formatting ---
+flake8==7.1.1
+black==24.8.0
+isort==5.13.2
+
+# --- Type checking ---
+mypy==1.11.2
+types-requests==2.31.0.6   # optional: adds type hints for common libraries
+
+# --- Pre-commit hooks ---
+pre-commit==3.8.0
+
+# --- Security scanning ---
+bandit==1.7.9
+safety==3.2.6
+
+# --- Packaging & build tools ---
+build==1.2.1
+setuptools>=70.0.0
+wheel==0.43.0
+
+# --- Release automation (semantic-release) ---
+python-semantic-release==9.6.0
+
+# --- Optional utilities ---
+requests==2.32.3   # if scripts use web calls
