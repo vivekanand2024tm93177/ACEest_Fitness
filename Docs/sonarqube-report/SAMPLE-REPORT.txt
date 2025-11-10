@@ -1,0 +1,3 @@
+This is a placeholder for the SonarQube report. 
+Run the Jenkins stage "Code Quality (SonarQube)" to generate a real report on your SonarQube server.
+Expected outputs: Bugs, Vulnerabilities, Code Smells, Coverage (if configured), Duplications, Maintainability rating.
