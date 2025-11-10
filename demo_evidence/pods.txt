@@ -1,0 +1,18 @@
+NAME                                 READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+aceest-app-blue-65548c9ff6-4c54c     1/1     Running   0          4m57s   10.244.0.23   minikube   <none>           <none>
+aceest-app-blue-65548c9ff6-d7dgq     1/1     Running   0          4m56s   10.244.0.31   minikube   <none>           <none>
+aceest-app-canary-7c69c64866-47zft   1/1     Running   0          4m57s   10.244.0.25   minikube   <none>           <none>
+aceest-app-green-db94d769b-c7xhn     1/1     Running   0          4m56s   10.244.0.27   minikube   <none>           <none>
+aceest-app-green-db94d769b-vmrkm     1/1     Running   0          4m57s   10.244.0.26   minikube   <none>           <none>
+aceest-app-prod-54f86857c4-5dkz4     1/1     Running   0          4m57s   10.244.0.28   minikube   <none>           <none>
+aceest-app-prod-54f86857c4-m556p     1/1     Running   0          4m56s   10.244.0.32   minikube   <none>           <none>
+aceest-app-prod-54f86857c4-qgtgz     1/1     Running   0          4m56s   10.244.0.30   minikube   <none>           <none>
+aceest-app-prod-54f86857c4-rf5wb     1/1     Running   0          4m56s   10.244.0.29   minikube   <none>           <none>
+aceest-app-stable-6565d8c77d-2vkhj   1/1     Running   0          4m56s   10.244.0.35   minikube   <none>           <none>
+aceest-app-stable-6565d8c77d-jf86r   1/1     Running   0          4m56s   10.244.0.37   minikube   <none>           <none>
+aceest-app-stable-6565d8c77d-lplnp   1/1     Running   0          4m56s   10.244.0.24   minikube   <none>           <none>
+aceest-app-stable-6565d8c77d-pntqw   1/1     Running   0          4m56s   10.244.0.36   minikube   <none>           <none>
+aceest-app-va-699f7fc6fc-5fsnh       1/1     Running   0          4m56s   10.244.0.34   minikube   <none>           <none>
+aceest-app-va-699f7fc6fc-dbfjb       1/1     Running   0          4m56s   10.244.0.38   minikube   <none>           <none>
+aceest-app-vb-56cf5df786-7ntqp       1/1     Running   0          4m55s   10.244.0.39   minikube   <none>           <none>
+aceest-app-vb-56cf5df786-jnln5       1/1     Running   0          4m56s   10.244.0.33   minikube   <none>           <none>

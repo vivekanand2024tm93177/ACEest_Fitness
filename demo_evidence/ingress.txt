@@ -1,0 +1,3 @@
+NAME                    CLASS   HOSTS                     ADDRESS        PORTS   AGE
+aceest-abtest-ingress   nginx   aceest-test.example.com   192.168.49.2   80      4h2m
+aceest-canary-ingress   nginx   aceest.example.com        192.168.49.2   80      4h2m

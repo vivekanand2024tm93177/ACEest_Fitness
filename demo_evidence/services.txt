@@ -1,0 +1,7 @@
+NAME                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+aceest-canary-svc    ClusterIP   10.106.181.101   <none>        80/TCP    4h2m
+aceest-gym-service   ClusterIP   10.102.168.32    <none>        80/TCP    4h3m
+aceest-stable-svc    ClusterIP   10.103.226.228   <none>        80/TCP    4h2m
+aceest-va-svc        ClusterIP   10.109.144.101   <none>        80/TCP    4h2m
+aceest-vb-svc        ClusterIP   10.110.251.194   <none>        80/TCP    4h2m
+kubernetes           ClusterIP   10.96.0.1        <none>        443/TCP   4h4m
