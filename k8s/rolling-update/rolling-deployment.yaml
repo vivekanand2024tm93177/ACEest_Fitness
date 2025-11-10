@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-app-prod
+  labels: { app: aceest-gym }
+spec:
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels: { app: aceest-gym }
+  template:
+    metadata:
+      labels: { app: aceest-gym }
+    spec:
+      containers:
+      - name: aceest-app
+        image: 2024tm93169/aceest-fitness-gym:1.2.3
+        ports: [ { containerPort: 5000 } ]

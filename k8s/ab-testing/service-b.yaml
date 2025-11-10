@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-vb-svc
+spec:
+  selector: { app: aceest-gym, version: vB }
+  ports:
+  - port: 80
+    targetPort: 5000

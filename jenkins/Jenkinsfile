@@ -1,0 +1,150 @@
+pipeline {
+  agent any
+
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
+    SONARQUBE_TOKEN       = credentials('sonar-token')
+    DOCKERHUB_REPO        = '2024tm93169/aceest-fitness-gym-jenkins'
+    SONARQUBE_SERVER       = 'My SonarQube Server' // Must match Jenkins configuration name
+  }
+
+  options {
+    timestamps()
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        echo "📦 Checking out code from GitHub..."
+        git branch: 'main',
+            url: 'https://github.com/2024tm93169/ACEest-Fitness-Gym-assignment2.git',
+            credentialsId: 'github-creds'
+      }
+    }
+
+    stage('Setup Python Environment') {
+      steps {
+        echo "🐍 Setting up Python environment..."
+        sh '''
+          python3 --version
+          python3 -m pip install --upgrade pip --break-system-packages
+          pip install --no-cache-dir -r requirements.txt --break-system-packages
+        '''
+      }
+    }
+
+    stage('Run Unit Tests') {
+      steps {
+        echo "🧪 Running unit tests with Pytest..."
+        sh '''
+          export PATH=$PATH:/var/jenkins_home/.local/bin
+          pytest -q --maxfail=1 --disable-warnings --junitxml=tests/results.xml tests/
+        '''
+      }
+      post {
+        always {
+          junit allowEmptyResults: true, testResults: 'tests/results.xml'
+        }
+      }
+    }
+
+    stage('Static Code Analysis (SonarQube)') {
+      steps {
+        script {
+          echo "🔍 Running SonarQube analysis..."
+          withSonarQubeEnv("${SONARQUBE_SERVER}") {
+            def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+            sh """
+              ${scannerHome}/bin/sonar-scanner \
+              -Dsonar.projectKey=ACEest-Fitness-Gym \
+              -Dsonar.sources=. \
+              -Dsonar.host.url=http://sonarqube:9000 \
+              -Dsonar.login=${SONARQUBE_TOKEN} \
+              -Dsonar.ws.timeout=120
+            """
+          }
+        }
+      }
+    }
+
+    stage('Quality Gate') {
+      steps {
+        script {
+          echo "🚦 Checking SonarQube Quality Gate status..."
+          timeout(time: 10, unit: 'MINUTES') {
+            def qg = waitForQualityGate abortPipeline: true
+            echo "Quality Gate result: ${qg.status}"
+          }
+        }
+      }
+    }
+
+    stage('Build & Push Docker Images') {
+      steps {
+        script {
+          echo "🐳 Building and pushing Docker images..."
+          def versions = [
+            ["1", "app/ACEest_Fitness.py"],
+            ["1.1", "app/ACEest_Fitness-V1.1.py"],
+            ["1.2", "app/ACEest_Fitness-V1.2.py"],
+            ["1.2.1", "app/ACEest_Fitness-V1.2.1.py"],
+            ["1.2.2", "app/ACEest_Fitness-V1.2.2.py"],
+            ["1.2.3", "app/ACEest_Fitness-V1.2.3.py"],
+            ["1.3", "app/ACEest_Fitness-V1.3.py"]
+          ]
+
+          docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
+            versions.each { v ->
+              def (tag, appFile) = v
+              sh """
+                echo "🔧 Building ${DOCKERHUB_REPO}:${tag} from ${appFile}"
+                docker build --build-arg APP_FILE=${appFile} -t ${DOCKERHUB_REPO}:${tag} .
+                docker push ${DOCKERHUB_REPO}:${tag}
+              """
+            }
+            sh """
+              docker tag ${DOCKERHUB_REPO}:1.3 ${DOCKERHUB_REPO}:latest
+              docker push ${DOCKERHUB_REPO}:latest
+            """
+          }
+        }
+      }
+    }
+
+    stage('Deploy to Minikube') {
+      steps {
+        script {
+          echo "☸️ Deploying to Minikube..."
+          sh '''
+            echo "🔧 Rewriting Kubeconfig paths..."
+            sed -i.bak 's|/Users/anandprakash/|/var/jenkins_home/|g' /var/jenkins_home/.kube/config
+            
+            echo "🔧 Configuring kubectl with Minikube IP: ${MINIKUBE_IP}"
+            kubectl --kubeconfig=/var/jenkins_home/.kube/config config set-cluster minikube \
+              --server=https://${MINIKUBE_IP}:8443 --insecure-skip-tls-verify=true
+
+            echo "🚀 Applying Kubernetes manifests..."
+            for dir in blue-green canary ab-testing rolling-update; do
+              kubectl apply -f k8s/$dir/
+            done
+
+            echo "🕶️ Deploying shadow release (tolerating failure)..."
+            kubectl apply -f k8s/shadow/ || true
+          '''
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "✅ CI/CD pipeline completed successfully!"
+    }
+    failure {
+      echo "❌ Pipeline failed. Check logs for details."
+    }
+    always {
+      cleanWs()
+    }
+  }
+}

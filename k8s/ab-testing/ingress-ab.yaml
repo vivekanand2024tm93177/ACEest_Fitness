@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aceest-abtest-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "50"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: aceest-test.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend: { service: { name: aceest-va-svc, port: { number: 80 } } }
+      - path: /
+        pathType: Prefix
+        backend: { service: { name: aceest-vb-svc, port: { number: 80 } } }

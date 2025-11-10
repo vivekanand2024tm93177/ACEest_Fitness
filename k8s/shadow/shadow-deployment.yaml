@@ -1,0 +1,9 @@
+# NOTE: This is a placeholder. True traffic mirroring requires a service mesh (e.g., Istio).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shadow-readme
+data:
+  README: |
+    To enable real shadow deployments, install Istio and apply an Istio VirtualService
+    that mirrors traffic from the primary service to the shadow service.
