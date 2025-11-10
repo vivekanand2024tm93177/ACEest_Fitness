@@ -1,0 +1,8 @@
+NAME                READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS   IMAGES                                 SELECTOR
+aceest-app-blue     2/2     2            2           4h3m   aceest-app   2024tm93177/aceest-fitness-gym:1.2     app=aceest-gym,env=blue
+aceest-app-canary   1/1     1            1           4h2m   aceest-app   2024tm93177/aceest-fitness-gym:1.3     app=aceest-gym,version=canary
+aceest-app-green    2/2     2            2           4h3m   aceest-app   2024tm93177/aceest-fitness-gym:1.3     app=aceest-gym,env=green
+aceest-app-prod     4/4     4            4           4h2m   aceest-app   2024tm93177/aceest-fitness-gym:1.2.3   app=aceest-gym
+aceest-app-stable   4/4     4            4           4h2m   aceest-app   2024tm93177/aceest-fitness-gym:1.2.2   app=aceest-gym,version=stable
+aceest-app-va       2/2     2            2           4h2m   aceest-app   2024tm93177/aceest-fitness-gym:1.3     app=aceest-gym,version=vA
+aceest-app-vb       2/2     2            2           4h2m   aceest-app   2024tm93177/aceest-fitness-gym:1.3     app=aceest-gym,version=vB
